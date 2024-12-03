@@ -67,11 +67,12 @@ always @(posedge clk or posedge reset) begin
     // Reset all variable
         state <= IDLE;
         score <= 4'b0000;    // begin with 0 score
-        lives <= 4'b0011;    // Starting with 3 lives
+        lives <= 4'b0000;    // Starting with 3 lives
         mole <= 0;
         mole_timer <= 0;
         hammer_timer <= 0;
         blink_counter <= 0;  // Used for blinking LED in END_SCREEN
+        button_prev = 0;
     end else begin
         case(state)
             IDLE: begin
@@ -82,8 +83,8 @@ always @(posedge clk or posedge reset) begin
                     // Initilizing gameplay variables
                     score <= 4'b0000;
                     lives <= 4'b0011;
-                    mole_timer <= random_num[7:0] % 3 + 1;  // Random timer between 1 and 3 ? (Replace this code to interface with RNG module)
-                    hammer_timer <= 8'd100;                 // 1 second for hammer timer
+                    mole_timer <= 300_000_000;
+                    hammer_timer <=  300_000_000;                 // 1 second for hammer timer
                 end
             end
             
@@ -113,8 +114,8 @@ always @(posedge clk or posedge reset) begin
                         // If yes, get a point & reset mole & timer variables to restart the GAMEPLAY logic loop
                         score <= score + 1;      // Increment score on button press
                         mole <= 0;               // Turn mole off
-                        mole_timer <= random_num[7:0] % 3 + 1;  // Reset mole timer to another randome variable (AGAIN, Change to work with external module)
-                        hammer_timer <= 8'd100;  // Reset hammer timer
+                        mole_timer <= 300_000_000;  // Reset mole timer to another randome variable (AGAIN, Change to work with external module)
+                        hammer_timer <=  300_000_000;  // Reset hammer timer
                     end 
                 end 
                 
@@ -132,8 +133,8 @@ always @(posedge clk or posedge reset) begin
                     
                     // If that did not trigger, then there are still lives remaining. Reset the timers to begin gameplay loop all over again
                     else begin
-                        mole_timer <= random_num[7:0] % 3 + 1;  // Again, signal to MODIFY THIS in accordance to new RNG module
-                        hammer_timer <= 8'd100;                 
+                        mole_timer <=  300_000_000;  // Again, signal to MODIFY THIS in accordance to new RNG module
+                        hammer_timer <=  300_000_000;                 
                     end
                 end
             end
@@ -164,5 +165,4 @@ always @(posedge clk or posedge reset) begin
 end
 
 endmodule
-
 
